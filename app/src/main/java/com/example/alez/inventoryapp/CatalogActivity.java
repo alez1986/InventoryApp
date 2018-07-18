@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.content.ContentValues;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.alez.inventoryapp.data.InventoryContract.InventoryEntry;
 import com.example.alez.inventoryapp.data.InventoryDbHelper;
@@ -45,6 +46,7 @@ public class CatalogActivity extends AppCompatActivity {
         values.put(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER, "+00000000000");
 
         long newRowId = db.insert(InventoryEntry.TABLE_NAME, null, values);
+        Log.v("InsertData", "Row id inserted "+newRowId);
     }
 
 
@@ -70,6 +72,18 @@ public class CatalogActivity extends AppCompatActivity {
                 null,                       // Don't filter by row groups
                 null);                      // The sort order
 
+        if (cursor.moveToFirst()) {
+            do {
+                Log.v("Query", "Product: ");
+                Log.v("Query", "name: " + cursor.getString(cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME)));
+                Log.v("Query", "price: " + cursor.getString(cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_PRICE)));
+                Log.v("Query", "quantity: " + cursor.getString(cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_QUANTITY)));
+                Log.v("Query", "supplier: " + cursor.getString(cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_NAME)));
+                Log.v("Query", "supplier phone: " + cursor.getString(cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_SUPPLIER_PHONE_NUMBER)));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
         return cursor;
     }
 }
