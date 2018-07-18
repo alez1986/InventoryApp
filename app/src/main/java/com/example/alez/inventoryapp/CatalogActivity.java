@@ -23,6 +23,8 @@ public class CatalogActivity extends AppCompatActivity {
 
         // To access database
         mDbHelper = new InventoryDbHelper(this);
+        insertData();
+        queryData();
     }
 
 
@@ -51,7 +53,7 @@ public class CatalogActivity extends AppCompatActivity {
 
 
     //* Return data from DB */
-    private Cursor queryData(){
+    private void queryData(){
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         String[] projection = {
@@ -84,6 +86,5 @@ public class CatalogActivity extends AppCompatActivity {
         }
 
         cursor.close();
-        return cursor;
     }
 }
