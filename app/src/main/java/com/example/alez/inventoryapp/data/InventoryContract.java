@@ -1,6 +1,7 @@
 package com.example.alez.inventoryapp.data;
 
 import android.net.Uri;
+import android.content.ContentResolver;
 import android.provider.BaseColumns;
 
 
@@ -19,6 +20,12 @@ public class InventoryContract {
     public static final class InventoryEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_INVENTORY);
+
+        public static final String CONTENT_LIST_TYPE =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_INVENTORY;
+
+        public static final String CONTENT_ITEM_TYPE =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_INVENTORY;
 
         /** Name of database table for products */
         public final static String TABLE_NAME = "product_inventory";
