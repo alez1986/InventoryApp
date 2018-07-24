@@ -23,8 +23,8 @@ public class CatalogActivity extends AppCompatActivity {
 
         // To access database
         mDbHelper = new InventoryDbHelper(this);
-        insertData();
-        queryData();
+        //insertData();
+        //queryData();
     }
 
 
