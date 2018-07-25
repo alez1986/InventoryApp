@@ -1,15 +1,21 @@
 package com.example.alez.inventoryapp;
 
+
+import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.content.ContentValues;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
+import android.support.design.widget.FloatingActionButton;
 import android.os.Bundle;
 import android.util.Log;
 
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
+
 import com.example.alez.inventoryapp.data.InventoryContract.InventoryEntry;
-import com.example.alez.inventoryapp.data.InventoryDbHelper;
 
 
 public class CatalogActivity extends AppCompatActivity {
@@ -19,15 +25,40 @@ public class CatalogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
 
-        //insertData();
-        //queryData();
+        // Setup FAB to open EditorActivity
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        ListView productListView = (ListView) findViewById(R.id.list);
+        View emptyView = findViewById(R.id.empty_view);
+        productListView.setEmptyView(emptyView);
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
-        //TODO: We will use this method to display all items from DB
+        displayDatabaseInfo();
+    }
+
+
+    private void displayDatabaseInfo() {
+        Cursor cursor = queryData();
+
+        // Find the ListView which will be populated with the product data
+        ListView productListView = (ListView) findViewById(R.id.list);
+
+        // Setup an Adapter to create a list item for each row of product data in the Cursor.
+        ProductCursorAdapter adapter = new ProductCursorAdapter(this, cursor);
+
+        // Attach the adapter to the ListView.
+        productListView.setAdapter(adapter);
     }
 
 

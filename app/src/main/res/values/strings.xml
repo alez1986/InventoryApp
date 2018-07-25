@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">InventoryApp</string>
+    <string name="action_insert_dummy_data">Insert Dummy Data</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_delete_all_entries">Delete All Products</string>
+    <string name="editor_activity_title_new_product">Add a Product</string>
+    <string name="action_save">Save</string>
+
+        <!-- Toast message in editor when new item has been successfully inserted [CHAR LIMIT=NONE] -->
+    <string name="editor_insert_item_successful">Item saved</string>
+
+    <!-- Toast message in editor when new item has failed to be inserted [CHAR LIMIT=NONE] -->
+    <string name="editor_insert_item_failed">Error with saving item</string>
+
+    <string name="category_overview">Overview</string>
+
+    <!-- Title text for the empty view [CHAR LIMIT=50] -->
+    <string name="empty_view_title_text">It\'s a bit empty here...</string>
+    <!-- Subtitle text for the empty view that prompts the user to add a product [CHAR LIMIT=50] -->
+    <string name="empty_view_subtitle_text">Get started by adding a product</string>
 </resources>

@@ -9,10 +9,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
+import com.example.alez.inventoryapp.data.InventoryContract.InventoryEntry;
 
-/**
- * {@link ContentProvider} for Inventory app.
- */
+
 public class InventoryProvider extends ContentProvider {
 
     /** Tag for the log messages */
@@ -39,13 +38,10 @@ public class InventoryProvider extends ContentProvider {
         // should recognize. All paths added to the UriMatcher have a corresponding code to return
         // when a match is found.
         sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY, INVENTORY);
-        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY, INVENTORY_ID);
+        sUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY, InventoryContract.PATH_INVENTORY + "/#", INVENTORY_ID);
     }
 
 
-    /**
-     * Initialize the provider and the database helper object.
-     */
     @Override
     public boolean onCreate() {
         // To access database
@@ -54,9 +50,6 @@ public class InventoryProvider extends ContentProvider {
     }
 
 
-    /**
-     * Perform the query for the given URI. Use the given projection, selection, selection arguments, and sort order.
-     */
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
@@ -70,13 +63,13 @@ public class InventoryProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         switch (match) {
             case INVENTORY:
-                cursor = database.query(InventoryContract.InventoryEntry.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = database.query(InventoryEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             case INVENTORY_ID:
-                selection = InventoryContract.InventoryEntry._ID + "=?";
+                selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                cursor = database.query(InventoryContract.InventoryEntry.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = database.query(InventoryEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             default:
@@ -86,9 +79,6 @@ public class InventoryProvider extends ContentProvider {
     }
 
 
-    /**
-     * Insert new data into the provider with the given ContentValues.
-     */
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
         final int match = sUriMatcher.match(uri);
@@ -101,22 +91,18 @@ public class InventoryProvider extends ContentProvider {
     }
 
 
-    /**
-     * Insert an item into the database with the given content values. Return the new content URI
-     * for that specific row in the database.
-     */
     private Uri insertItem(Uri uri, ContentValues values) {
-        String name = values.getAsString(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME);
+        String name = values.getAsString(InventoryEntry.COLUMN_PRODUCT_NAME);
         if (name == null) {
             throw new IllegalArgumentException("Product requires a name");
         }
 
-        Integer price = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_PRODUCT_PRICE);
+        Integer price = values.getAsInteger(InventoryEntry.COLUMN_PRODUCT_PRICE);
         if (price != null && price < 0) {
             throw new IllegalArgumentException("Product requires valid price");
         }
 
-        Integer quantity = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY);
+        Integer quantity = values.getAsInteger(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
         if (quantity != null && quantity < 0) {
             throw new IllegalArgumentException("Product requires valid quantity");
         }
@@ -125,7 +111,7 @@ public class InventoryProvider extends ContentProvider {
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         // Insert the new product with the given values
-        long id = database.insert(InventoryContract.InventoryEntry.TABLE_NAME, null, values);
+        long id = database.insert(InventoryEntry.TABLE_NAME, null, values);
 
         // If the ID is -1, then the insertion failed. Log an error and return null.
         if (id == -1) {
@@ -138,9 +124,6 @@ public class InventoryProvider extends ContentProvider {
     }
 
 
-    /**
-     * Updates the data at the given selection and selection arguments, with the new ContentValues.
-     */
     @Override
     public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
@@ -151,7 +134,7 @@ public class InventoryProvider extends ContentProvider {
                 // For the INVENTORY_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
-                selection = InventoryContract.InventoryEntry._ID + "=?";
+                selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
                 return updateItem(uri, contentValues, selection, selectionArgs);
             default:
@@ -166,22 +149,22 @@ public class InventoryProvider extends ContentProvider {
             return 0;
         }
 
-        if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME)) {
-            String name = values.getAsString(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME);
+        if (values.containsKey(InventoryEntry.COLUMN_PRODUCT_NAME)) {
+            String name = values.getAsString(InventoryEntry.COLUMN_PRODUCT_NAME);
             if (name == null) {
                 throw new IllegalArgumentException("Product requires a name");
             }
         }
 
-        if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_PRODUCT_PRICE)) {
-            Integer price = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_PRODUCT_PRICE);
+        if (values.containsKey(InventoryEntry.COLUMN_PRODUCT_PRICE)) {
+            Integer price = values.getAsInteger(InventoryEntry.COLUMN_PRODUCT_PRICE);
             if (price != null && price < 0) {
                 throw new IllegalArgumentException("Product requires valid price");
             }
         }
 
-        if (values.containsKey(InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY)) {
-            Integer quantity = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_PRODUCT_QUANTITY);
+        if (values.containsKey(InventoryEntry.COLUMN_PRODUCT_QUANTITY)) {
+            Integer quantity = values.getAsInteger(InventoryEntry.COLUMN_PRODUCT_QUANTITY);
             if (quantity != null && quantity < 0) {
                 throw new IllegalArgumentException("Product requires valid quantity");
             }
@@ -191,13 +174,10 @@ public class InventoryProvider extends ContentProvider {
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
         // Returns the number of database rows affected by the update statement
-        return database.update(InventoryContract.InventoryEntry.TABLE_NAME, values, selection, selectionArgs);
+        return database.update(InventoryEntry.TABLE_NAME, values, selection, selectionArgs);
     }
 
 
-    /**
-     * Delete the data at the given selection and selection arguments.
-     */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         // Get writeable database
@@ -207,29 +187,26 @@ public class InventoryProvider extends ContentProvider {
         switch (match) {
             case INVENTORY:
                 // Delete all rows that match the selection and selection args
-                return database.delete(InventoryContract.InventoryEntry.TABLE_NAME, selection, selectionArgs);
+                return database.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
             case INVENTORY_ID:
                 // Delete a single row given by the ID in the URI
-                selection = InventoryContract.InventoryEntry._ID + "=?";
+                selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
-                return database.delete(InventoryContract.InventoryEntry.TABLE_NAME, selection, selectionArgs);
+                return database.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
         }
     }
 
 
-    /**
-     * Returns the MIME type of data for the content URI.
-     */
     @Override
     public String getType(Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case INVENTORY:
-                return InventoryContract.InventoryEntry.CONTENT_LIST_TYPE;
+                return InventoryEntry.CONTENT_LIST_TYPE;
             case INVENTORY_ID:
-                return InventoryContract.InventoryEntry.CONTENT_ITEM_TYPE;
+                return InventoryEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }
