@@ -1,7 +1,10 @@
 package com.example.alez.inventoryapp;
 
 
+import android.app.LoaderManager;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.content.ContentValues;
 import android.net.Uri;
@@ -18,7 +21,11 @@ import android.widget.ListView;
 import com.example.alez.inventoryapp.data.InventoryContract.InventoryEntry;
 
 
-public class CatalogActivity extends AppCompatActivity {
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int PRODUCT_LOADER = 0;
+
+    ProductCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,27 +45,11 @@ public class CatalogActivity extends AppCompatActivity {
         ListView productListView = (ListView) findViewById(R.id.list);
         View emptyView = findViewById(R.id.empty_view);
         productListView.setEmptyView(emptyView);
-    }
 
+        mCursorAdapter = new ProductCursorAdapter(this, null);
+        productListView.setAdapter(mCursorAdapter);
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        displayDatabaseInfo();
-    }
-
-
-    private void displayDatabaseInfo() {
-        Cursor cursor = queryData();
-
-        // Find the ListView which will be populated with the product data
-        ListView productListView = (ListView) findViewById(R.id.list);
-
-        // Setup an Adapter to create a list item for each row of product data in the Cursor.
-        ProductCursorAdapter adapter = new ProductCursorAdapter(this, cursor);
-
-        // Attach the adapter to the ListView.
-        productListView.setAdapter(adapter);
+        getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
     }
 
 
@@ -89,5 +80,27 @@ public class CatalogActivity extends AppCompatActivity {
 
         // Perform a query on the product_inventory table
         return getContentResolver().query(InventoryEntry.CONTENT_URI, projection, null, null, null);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {
+                InventoryEntry._ID,
+                InventoryEntry.COLUMN_PRODUCT_NAME,
+                InventoryEntry.COLUMN_PRODUCT_PRICE,
+                InventoryEntry.COLUMN_PRODUCT_QUANTITY };
+
+        // Perform a query on the product_inventory table
+        return new CursorLoader(this, InventoryEntry.CONTENT_URI, projection, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mCursorAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mCursorAdapter.swapCursor(null);
     }
 }
