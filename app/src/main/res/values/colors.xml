@@ -5,4 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="editorColorPrimary">#2D3640</color>
     <color name="editorColorPrimaryDark">#394450</color>
+    <color name="color_text_main">#2B3D4D</color>
+    <color name="color_text_sub">#AEB6BD</color>
 </resources>
