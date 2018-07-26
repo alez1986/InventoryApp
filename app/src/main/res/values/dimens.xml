@@ -4,5 +4,9 @@
 
     <!-- Common margin value used throughout the app -->
     <dimen name="activity_margin">16dp</dimen>
+    <dimen name="editor_item_height">50dp</dimen>
+    <dimen name="editor_quantity_button">40dp</dimen>
+    <dimen name="editor_top_margin">1dp</dimen>
+    <dimen name="editor_quantity_width">10dp</dimen>
 </resources>
 

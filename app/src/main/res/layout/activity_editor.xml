@@ -1,11 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/activity_margin"
-    tools:context=".EditorActivity">
+    android:layout_height="match_parent">
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="@dimen/activity_margin"
+        tools:context=".EditorActivity">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="@string/category_product"
+                style="@style/CategoryStyle" />
+
+            <TextView
+                android:text="@string/category_price"
+                style="@style/CategoryStyle" />
+
+            <TextView
+                android:text="@string/category_quantity"
+                style="@style/CategoryStyle" />
+
+            <TextView
+                android:text="@string/category_supplier"
+                style="@style/CategoryStyle" />
+
+            <TextView
+                android:text="@string/category_phone"
+                style="@style/CategoryStyle" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/edit_product_name"
+                android:hint="@string/product_name"
+                android:inputType="textCapWords"
+                style="@style/EditorFieldStyle" />
+
+            <EditText
+                android:id="@+id/edit_product_price"
+                android:hint="@string/product_price"
+                android:inputType="number"
+                style="@style/EditorFieldStyle" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/editor_item_height" >
+
+                <Button
+                    android:id="@+id/decrement"
+                    android:layout_width="@dimen/editor_quantity_button"
+                    android:layout_height="@dimen/editor_quantity_button"
+                    android:text="@string/decrement"/>
+
+                <TextView
+                    android:id="@+id/edit_product_quantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/editor_top_margin"
+                    android:layout_marginLeft="@dimen/activity_margin"
+                    android:layout_marginRight="@dimen/activity_margin"
+                    android:text="0"
+                    style="@style/EditorFieldStyle" />
+
+                <Button
+                    android:id="@+id/increment"
+                    android:layout_width="@dimen/editor_quantity_button"
+                    android:layout_height="@dimen/editor_quantity_button"
+                    android:text="@string/increment"/>
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/edit_product_supplier"
+                android:hint="@string/product_supplier"
+                android:inputType="textCapWords"
+                style="@style/EditorFieldStyle" />
+
+            <EditText
+                android:id="@+id/edit_product_supplier_phone"
+                android:hint="@string/product_supplier_phone"
+                android:inputType="phone"
+                style="@style/EditorFieldStyle" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/order"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/activity_margin"
+        android:text="@string/action_order"/>
+</RelativeLayout>
